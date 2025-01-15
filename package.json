@@ -1,0 +1,17 @@
+{
+    "name": "immunodb",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "csv": "node src/csv_to_json_builder.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "csv-parse": "^5.6.0"
+    },
+    "type": "module"
+}

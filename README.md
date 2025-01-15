@@ -1,2 +1,3 @@
-# immunodb
-Immunology Database
+# ImmunoDB
+
+Immunology Database Webtool
