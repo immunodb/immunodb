@@ -1,16 +1,17 @@
-cell_id,name,description
-cd4,CD4+ T Cell,Helper T cells that coordinate immune responses by stimulating other immune cells
-cd8,CD8+ T Cell,Cytotoxic T cells that directly kill infected or abnormal cells
-nk,Natural Killer Cell,Natural Killer cells that provide rapid responses against viruses and tumors
-ilc1,Innate Lymphoid Cell Type 1,Innate Lymphoid Cells that mirror Th1 functions by producing interferon-gamma against intracellular pathogens
-ilc2,Innate Lymphoid Cell Type 2,Innate Lymphoid Cells that help with parasite defense and tissue repair
-ilc3,Innate Lymphoid Cell Type 3,Innate Lymphoid Cells that support barrier immunity and tissue homeostasis
-treg,T Regulatory Cell,Regulatory T cells that suppress immune responses to maintain tolerance and prevent autoimmunity
-tfh,T Follicular Helper Cell,T Follicular Helper cells that assist B cells in antibody production
-th1,T Helper 1 Cell,T helper cells specialized in fighting intracellular pathogens
-th2,T Helper 2 Cell,T helper cells that combat parasites and mediate allergic responses
-th17,T Helper 17 Cell,T helper cells that protect against extracellular bacteria and fungi
-th22,T Helper 22 Cell,T helper cells that support skin immunity
-th9,T Helper 9 Cell,T helper cells that contribute to mucosal immunity and inflammation
-mait,Mucoasl-Associated Invariant T Cell,Mucosal-Associated Invariant T cells that guard mucosal surfaces against microbial threats
-apc,Antigen Presenting Cell,Antigen Presenting Cells that capture and present antigens to T cells to initiate adaptive immune responses
+cell_id,short,name,description
+cd4,CD4,CD4+ T Cell,Helper T cells that coordinate immune responses by stimulating other immune cells
+cd8,CD8,CD8+ T Cell,Cytotoxic T cells that directly kill infected or abnormal cells
+nk,NK,Natural Killer Cell,Natural Killer cells that provide rapid responses against viruses and tumors
+ilc1,ILC1,Innate Lymphoid Cell Type 1,Innate Lymphoid Cells that mirror Th1 functions by producing interferon-gamma against intracellular pathogens
+ilc2,ILC2,Innate Lymphoid Cell Type 2,Innate Lymphoid Cells that help with parasite defense and tissue repair
+ilc3,ILC3,Innate Lymphoid Cell Type 3,Innate Lymphoid Cells that support barrier immunity and tissue homeostasis
+treg,TREG,T Regulatory Cell,Regulatory T cells that suppress immune responses to maintain tolerance and prevent autoimmunity
+tfh,TFH,T Follicular Helper Cell,T Follicular Helper cells that assist B cells in antibody production
+th1,TH1,T Helper 1 Cell,T helper cells specialized in fighting intracellular pathogens
+th2,TH2,T Helper 2 Cell,T helper cells that combat parasites and mediate allergic responses
+tr1,TR1,Regulatory T Cell,Regulatory T cells maintain immune tolerance and suppressing excessive immune responses
+th17,TH17,T Helper 17 Cell,T helper cells that protect against extracellular bacteria and fungi
+th22,TH22,T Helper 22 Cell,T helper cells that support skin immunity
+th9,TH9,T Helper 9 Cell,T helper cells that contribute to mucosal immunity and inflammation
+mait,MAIT,Mucoasl-Associated Invariant T Cell,Mucosal-Associated Invariant T cells that guard mucosal surfaces against microbial threats. Their T-cell receptor can bind to a large range of non-peptide molecules.
+apc,APC,Antigen Presenting Cell,Antigen Presenting Cells that capture and present antigens to T cells to initiate adaptive immune responses

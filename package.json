@@ -5,7 +5,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "csv": "node src/csv_to_json_builder.js",
+        "csv": "node src/scripts/csv_to_json_builder.js",
+        "pull": "node src/scripts/pull_csv.js",
         "dev": "astro dev",
         "build": "astro build",
         "preview": "astro preview",
@@ -15,7 +16,9 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "csv-parse": "^5.6.0",
-        "astro": "^5.1.7"
+        "astro": "5.1.7",
+        "csv-parse": "5.6.0",
+        "google-auth-library": "9.15.0",
+        "google-spreadsheet": "4.1.4"
     }
 }
