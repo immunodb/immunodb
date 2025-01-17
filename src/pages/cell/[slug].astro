@@ -1,0 +1,20 @@
+---
+import cells from '../../../data/cells.json';
+import Layout from '../../layouts/layout.astro';
+
+export async function getStaticPaths() {
+  return cells.map(cell => ({
+    params: { slug: cell.cell_id },
+    props: { cell }
+  }));
+}
+
+const { cell } = Astro.props;
+---
+
+<Layout title={cell.name}>
+  <article>
+    <h1>{cell.name}</h1>
+    <p>{cell.description}</p>
+  </article>
+</Layout>

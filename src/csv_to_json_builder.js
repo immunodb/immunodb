@@ -1,5 +1,5 @@
 import { parse } from "csv-parse/sync";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 
 // Arrays to store the data from each CSV file
 let cells = [];
@@ -112,6 +112,8 @@ for (let c of cells) {
 }
 
 console.log(cells);
+const cellString = JSON.stringify(cells, null, 2);
+writeFileSync("data/cells.json", cellString);
 
 // Build Cytokines
 console.log("Building Cytokines");
