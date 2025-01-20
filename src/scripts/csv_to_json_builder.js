@@ -1,128 +1,147 @@
 import { parse } from "csv-parse/sync";
 import { readFileSync, writeFileSync } from "fs";
 
-// Arrays to store the data from each CSV file
-let cells = [];
-let cell_markers = [];
-let cell_products = [];
-let cell_transcription_factors = [];
-let cell_subsets = [];
-let cell_growth_factors = [];
-let cytokines = [];
+function sort_on_short(array) {
+  return array.sort((a, b) => {
+    if (a.short > b.short) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+}
 
-// Read each CSV file synchronously
-const cells_file = readFileSync("./data/cells.csv", "utf-8");
-const cell_markers_file = readFileSync("./data/cell_markers.csv", "utf-8");
-const cell_products_file = readFileSync("./data/cell_products.csv", "utf-8");
-const cell_transcription_factors_file = readFileSync(
-    "./data/cell_transcription_factors.csv",
-    "utf-8"
+const opts = {
+  columns: true,
+  skip_empty_lines: true,
+};
+
+let cell_markers = parse(
+  readFileSync("./data/cell_markers.csv", "utf-8"),
+  opts,
 );
-const cell_subsets_file = readFileSync("./data/cell_subsets.csv", "utf-8");
-const cell_growth_factors_file = readFileSync(
-    "./data/cell_growth_factors.csv",
-    "utf-8"
+let cell_products = parse(
+  readFileSync("./data/cell_products.csv", "utf-8"),
+  opts,
 );
-const cytokines_file = readFileSync("./data/cytokines.csv", "utf-8");
-
-// Parse each file's content into arrays of objects
-cells = parse(cells_file, {
-    columns: true,
-    skip_empty_lines: true,
-});
-console.log(`cells.csv contains ${cells.length} records`);
-
-cell_markers = parse(cell_markers_file, {
-    columns: true,
-    skip_empty_lines: true,
-});
-console.log(`cell_markers.csv contains ${cell_markers.length} records`);
-
-cell_products = parse(cell_products_file, {
-    columns: true,
-    skip_empty_lines: true,
-});
-console.log(`cell_products.csv contains ${cell_products.length} records`);
-
-cell_transcription_factors = parse(cell_transcription_factors_file, {
-    columns: true,
-    skip_empty_lines: true,
-});
-console.log(
-    `cell_transcription_factors.csv contains ${cell_transcription_factors.length} records`
+let cell_transcription_factors = parse(
+  readFileSync("./data/cell_transcription_factors.csv", "utf-8"),
+  opts,
+);
+let cell_subsets = parse(
+  readFileSync("./data/cell_subsets.csv", "utf-8"),
+  opts,
+);
+let cell_growth_factors = parse(
+  readFileSync("./data/cell_growth_factors.csv", "utf-8"),
+  opts,
 );
 
-cell_subsets = parse(cell_subsets_file, {
-    columns: true,
-    skip_empty_lines: true,
-});
-console.log(`cell_subsets.csv contains ${cell_subsets.length} records`);
-
-cell_subsets = parse(cell_subsets_file, {
-    columns: true,
-    skip_empty_lines: true,
-});
-console.log(`cell_subsets.csv contains ${cell_subsets.length} records`);
-
-cell_growth_factors = parse(cell_growth_factors_file, {
-    columns: true,
-    skip_empty_lines: true,
-});
-console.log(
-    `cell_growth_factors.csv contains ${cell_growth_factors.length} records`
+let cytokines = parse(readFileSync("./data/cytokines.csv", "utf-8"), opts);
+cytokines = sort_on_short(cytokines);
+let transcription_factors = parse(
+  readFileSync("./data/transcription_factors.csv", "utf-8"),
+  opts,
 );
-
-cytokines = parse(cytokines_file, {
-    columns: true,
-    skip_empty_lines: true,
-});
-console.log(`cytokines.csv contains ${cytokines.length} records`);
-
-// Log the results
-console.log("All files have been read successfully");
+transcription_factors = sort_on_short(transcription_factors);
+let markers = parse(readFileSync("./data/markers.csv", "utf-8"), opts);
+markers = sort_on_short(markers);
+let cells = parse(readFileSync("./data/cells.csv", "utf-8"), opts);
+cells = sort_on_short(cells);
 
 // Build Cells
 console.log("Building Cells");
+
 for (let c of cells) {
-    console.log("ID: " + c.cell_id);
+  c.markers = cell_markers
+    .filter((x) => x.cell_id == c.cell_id)
+    .map((x) => {
+      return {
+        name: markers.find((m) => m.marker_id == x.marker_id).short,
+        id: x.marker_id,
+      };
+    });
 
-    c.markers = cell_markers
-        .filter((x) => x.cell_id == c.cell_id)
-        .map((x) => x.marker_id);
+  c.products = cell_products
+    .filter((x) => x.cell_id == c.cell_id)
+    .map((x) => {
+      return { name: x.short, id: x.cytokine_id };
+    });
 
-    c.products = cell_products
-        .filter((x) => x.cell_id == c.cell_id)
-        .map((x) => x.cytokine_id);
+  c.transcription_factors = cell_transcription_factors
+    .filter((x) => x.cell_id == c.cell_id)
+    .map((x) => {
+      return {
+        name: transcription_factors.find(
+          (tf) => tf.transcription_factor_id == x.transcription_factor_id,
+        ).short,
+        id: x.transcription_factor_id,
+      };
+    });
 
-    c.transcription_factors = cell_transcription_factors
-        .filter((x) => x.cell_id == c.cell_id)
-        .map((x) => x.transcription_factor_id);
+  c.subsets = cell_subsets
+    .filter((x) => x.cell_id == c.cell_id)
+    .map((x) => {
+      let child = x.subset_cell_id;
+      cells.find((x) => x.cell_id == child).parent = {
+        name: c.short,
+        id: c.cell_id,
+      };
+      return {
+        name: cells.find((s) => s.cell_id == x.subset_cell_id).short,
+        id: x.subset_cell_id,
+      };
+    });
 
-    c.subsets = cell_subsets
-        .filter((x) => x.cell_id == c.cell_id)
-        .map((x) => x.transcription_factor_id);
+  c.growth_factors = cell_growth_factors
+    .filter((x) => x.cell_id == c.cell_id)
+    .map((x) => {
+      return { name: x.short, id: x.cytokine_id };
+    });
 
-    for (let sub of c.subsets) {
-        // TODO
-    }
-
-    c.growth_factors = cell_growth_factors
-        .filter((x) => x.cell_id == c.cell_id)
-        .map((x) => x.cytokine_id);
+  c.id = "cell-" + c.cell_id;
 }
 
-console.log(cells);
-const cellString = JSON.stringify(cells, null, 2);
-writeFileSync("data/cells.json", cellString);
+writeFileSync("data/cells.json", JSON.stringify(cells, null, 4));
 
 // Build Cytokines
 console.log("Building Cytokines");
-for (let c of cytokines) {
-    console.log("ID: " + c.cytokine_id);
 
-    c.targets = cells
-        .filter((cell) => cell.growth_factors.includes(c.cytokine_id))
-        .map((cell) => cell.cell_id);
+for (let c of cytokines) {
+  c.id = "cytokine-" + c.cytokine_id;
+  c.targets = cells
+    .filter((cell) => cell.growth_factors.includes(c.cytokine_id))
+    .map((cell) => cell.cell_id);
 }
 
-console.log(cytokines);
+writeFileSync("data/cytokines.json", JSON.stringify(cytokines, null, 2));
+
+// Build Markers
+
+console.log("Building Markers");
+for (let m of markers) {
+  m.id = "marker-" + m.marker_id;
+  m.found_on = cell_markers
+    .filter((cm) => cm.marker_id == m.marker_id)
+    .map((cm) => {
+      return {
+        name: cells.find((x) => x.cell_id == cm.cell_id).short,
+        id: cm.cell_id,
+      };
+    });
+}
+
+writeFileSync("data/markers.json", JSON.stringify(markers, null, 2));
+
+// Build Transcription Factors
+console.log("Building Transcription Factors");
+for (let tf of transcription_factors) {
+  tf.id = "transcription-factor-" + tf.transcription_factor_id;
+}
+
+writeFileSync(
+  "data/transcription_factors.json",
+  JSON.stringify(transcription_factors, null, 2),
+);
+
+console.log("Done JSON Build");

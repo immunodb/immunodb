@@ -1,0 +1,23 @@
+---
+let { refs } = Astro.props;
+refs = ["demo"];
+---
+
+<h2>References</h2>
+<hr />
+<ul>
+  {
+    refs.map((e) => (
+      <li>
+        Article - Author - <a href="https://pubmed.ncbi.nlm.nih.gov/">Pubmed</a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  h2 {
+    font-size: 20px;
+    margin-top: 20px;
+  }
+</style>

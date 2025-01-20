@@ -1,0 +1,43 @@
+---
+import cytokines from "../../../data/cytokines.json";
+import Infobox from "../../components/infobox.astro";
+import References from "../../components/references.astro";
+import Layout from "../../layouts/layout.astro";
+
+export async function getStaticPaths() {
+  return cytokines.map((cytokine) => ({
+    params: { cytokine_id: cytokine.cytokine_id },
+    props: { cytokine },
+  }));
+}
+
+const { cytokine } = Astro.props;
+---
+
+<Layout title={cytokine.name}>
+  <article data-pagefind-body>
+    <h1>{cytokine.name}</h1>
+    <hr />
+    <Infobox>
+      <li><span>Class</span> Cytokine</li>
+    </Infobox>
+
+    <p>{cytokine.description}</p>
+  </article>
+  <References />
+</Layout>
+
+<style>
+  hr {
+    margin-bottom: 20px;
+  }
+  article {
+    overflow: auto;
+  }
+  li {
+    list-style: none;
+  }
+  span {
+    font-weight: 600;
+  }
+</style>

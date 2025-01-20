@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+import Infobox from "../../components/infobox.astro";
+import References from "../../components/references.astro";
+import Layout from "../../layouts/layout.astro";
+
+export async function getStaticPaths() {
+  const cells = await getCollection("cells");
+  return cells.map((cell) => ({
+    params: { cell_id: cell.data.cell_id },
+    props: { cell: cell.data },
+  }));
+}
+
+const { cell } = Astro.props;
+---
+
+<Layout title={cell.name}>
+  <article data-pagefind-body>
+    <h1>{cell.name}</h1>
+    <hr />
+    <Infobox>
+      <li><span>Class</span> Lymphocyte</li>
+      <li>
+        <span>Surface Markers</span>
+        {
+          cell.markers.map((m, i) => (
+            <Fragment>
+              {i > 0 && ", "}
+              <a href={"/marker/" + m.id}>{m.name}</a>
+            </Fragment>
+          ))
+        }
+      </li>
+    </Infobox>
+
+    <p>{cell.description}</p>
+  </article>
+  <References />
+</Layout>
+
+<style>
+  hr {
+    margin-bottom: 20px;
+  }
+  article {
+    overflow: auto;
+  }
+  li {
+    list-style: none;
+  }
+  span {
+    font-weight: 600;
+  }
+</style>

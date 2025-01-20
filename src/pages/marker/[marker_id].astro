@@ -1,0 +1,27 @@
+---
+import markers from "../../../data/markers.json";
+import Layout from "../../layouts/layout.astro";
+
+export async function getStaticPaths() {
+  return markers.map((marker) => ({
+    params: { marker_id: marker.marker_id },
+    props: { marker },
+  }));
+}
+
+const { marker } = Astro.props;
+---
+
+<Layout title={marker.name}>
+  <article data-pagefind-body>
+    <h1>{marker.name}</h1>
+    <p>Found on: {marker.found_on.map(x => (
+      <a href={`/cell/${x.id}`}>{x.name}</a>
+    ))}</p>
+  </article>
+  <style>
+    article {
+      margin: 50px;
+    }
+  </style>
+</Layout>

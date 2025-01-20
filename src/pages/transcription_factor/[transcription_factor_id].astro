@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/layout.astro";
+
+export async function getStaticPaths() {
+  const transcription_factors = await getCollection("transcription_factors");
+  return transcription_factors.map((tf) => ({
+    params: { transcription_factor_id: tf.data.transcription_factor_id },
+    props: { transcription_factor: tf.data },
+  }));
+}
+
+const { transcription_factor } = Astro.props;
+---
+
+<Layout title={transcription_factor.name}>
+  <article data-pagefind-body>
+    <h1>{transcription_factor.name}</h1>
+    <p>{transcription_factor.description}</p>
+  </article>
+  <style>
+    article {
+      margin: 50px;
+    }
+  </style>
+</Layout>
