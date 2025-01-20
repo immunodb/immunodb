@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "packageManager": "pnpm@10.0.0",
   "scripts": {
     "csv": "node src/scripts/csv_to_json_builder.js",
     "pull": "node src/scripts/pull_csv.js",
