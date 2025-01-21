@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "../../layouts/layout.astro";
+import Page from "../../layouts/page.astro";
 
 export async function getStaticPaths() {
   const transcription_factors = await getCollection("transcription_factors");
@@ -13,14 +13,6 @@ export async function getStaticPaths() {
 const { transcription_factor } = Astro.props;
 ---
 
-<Layout title={transcription_factor.name}>
-  <article data-pagefind-body>
-    <h1>{transcription_factor.name}</h1>
-    <p>{transcription_factor.description}</p>
-  </article>
-  <style>
-    article {
-      margin: 50px;
-    }
-  </style>
-</Layout>
+<Page data={transcription_factor}>
+  <li><span>Class</span> Class</li>
+</Page>
