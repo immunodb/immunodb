@@ -27,7 +27,7 @@ jobs:
           SHEET_ID: ${{secrets.SHEET_ID}}
         run: |
           echo "Checking if variables are set (will show blank if set):"
-          echo "email: $email"
+          echo "email: $EMAIL"
           npm install -g pnpm
           pnpm install
           node src/scripts/pull_csv.js
