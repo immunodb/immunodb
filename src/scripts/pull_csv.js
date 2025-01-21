@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { JWT } from "google-auth-library";
 import { GoogleSpreadsheet } from "google-spreadsheet";
+import assert from "node:assert/strict";
 
 const CELL_NAMES = [
   "cells",
@@ -32,6 +33,10 @@ async function get_doc() {
       sheet_id: process.env.SHEET_ID,
     };
   }
+  assert(creds.client_email != null);
+  assert(creds.private_key != null);
+  assert(creds.sheet_id != null);
+
   const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
   const jwt = new JWT({
@@ -42,7 +47,7 @@ async function get_doc() {
 
   const doc = new GoogleSpreadsheet(creds.sheet_id, jwt);
 
-  await doc.loadInfo(); // loads document properties and worksheets
+  await doc.loadInfo();
   console.log("Loaded spreadsheet " + doc.title);
   return doc;
 }
