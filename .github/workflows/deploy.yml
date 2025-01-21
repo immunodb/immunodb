@@ -28,8 +28,11 @@ jobs:
         run: |
           echo "Checking if variables are set (will show blank if set):"
           echo "email: $EMAIL"
+          echo "PRIVATE_KEY: $PRIVATE_KEY"
+          echo "SHEET_ID: $SHEET_ID"
           npm install -g pnpm
           pnpm install
+          echo "Running scripts"
           node src/scripts/pull_csv.js
           node src/scripts/csv_to_json_builder.js
 

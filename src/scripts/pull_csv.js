@@ -25,7 +25,7 @@ for (const element of CELL_NAMES) {
 async function get_doc() {
   let creds = {};
   try {
-    const creds = JSON.parse(readFileSync("gkey.json"));
+    creds = JSON.parse(readFileSync("gkey.json"));
   } catch {
     creds = {
       client_email: process.env.EMAIL,
