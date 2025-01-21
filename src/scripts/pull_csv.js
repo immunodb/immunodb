@@ -22,19 +22,25 @@ for (const element of CELL_NAMES) {
 }
 
 async function get_doc() {
-  const creds = JSON.parse(readFileSync("gkey.json"));
+  let creds = {};
+  try {
+    const creds = JSON.parse(readFileSync("gkey.json"));
+  } catch {
+    creds = {
+      client_email: process.env.EMAIL,
+      private_key: process.env.PRIVATE_KEY,
+      sheet_id: process.env.SHEET_ID,
+    };
+  }
   const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
   const jwt = new JWT({
-    email: creds.client_email || process.env.EMAIL,
-    key: creds.private_key || process.env.PRIVATE_KEY,
+    email: creds.client_email,
+    key: creds.private_key,
     scopes: SCOPES,
   });
 
-  const doc = new GoogleSpreadsheet(
-    creds.sheet_id || process.env.SHEET_ID,
-    jwt,
-  );
+  const doc = new GoogleSpreadsheet(creds.sheet_id, jwt);
 
   await doc.loadInfo(); // loads document properties and worksheets
   console.log("Loaded spreadsheet " + doc.title);
