@@ -22,10 +22,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Get data
         env:
-          email: ${{secrets.EMAIL}}
-          pk: ${{secrets.PRIVATE_KEY}}
-          sheet_id: ${{secrets.SHEET_ID}}
+          EMAIL: ${{ secrets.EMAIL }}
+          PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+          SHEET_ID: ${{secrets.SHEET_ID}}
         run: |
+          echo "Checking if variables are set (will show blank if set):"
+          echo "email: $email"
           npm install -g pnpm
           pnpm install
           node src/scripts/pull_csv.js
