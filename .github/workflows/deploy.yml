@@ -26,10 +26,10 @@ jobs:
           pk: ${{secrets.PRIVATE_KEY}}
           sheet_id: ${{secrets.SHEET_ID}}
         run: |
-        npm install -g pnpm
-        pnpm install
-        node src/scripts/pull_csv.js
-        node src/scripts/csv_to_json_builder.js
+          npm install -g pnpm
+          pnpm install
+          node src/scripts/pull_csv.js
+          node src/scripts/csv_to_json_builder.js
 
       - name: Install, build, and upload your site
         uses: withastro/action@v3
