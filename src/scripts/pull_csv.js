@@ -26,12 +26,15 @@ async function get_doc() {
   const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
   const jwt = new JWT({
-    email: creds.client_email,
-    key: creds.private_key,
+    email: creds.client_email || process.env.EMAIL,
+    key: creds.private_key || process.env.PRIVATE_KEY,
     scopes: SCOPES,
   });
 
-  const doc = new GoogleSpreadsheet(creds.sheet_id, jwt);
+  const doc = new GoogleSpreadsheet(
+    creds.sheet_id || process.env.SHEET_ID,
+    jwt,
+  );
 
   await doc.loadInfo(); // loads document properties and worksheets
   console.log("Loaded spreadsheet " + doc.title);
