@@ -21,7 +21,7 @@ const { cell } = Astro.props;
       cell.markers.map((m, i) => (
         <Fragment>
           {i > 0 && ", "}
-          <a href={"/marker/" + m.id}>{m.name}</a>
+          <a href={"/immunodb/marker/" + m.id}>{m.name}</a>
         </Fragment>
       ))
     }
