@@ -1,17 +1,43 @@
+type CellID = string;
+type CytokineID = string;
+type SurfaceMarkerID = string;
+type TranscriptionFactorID = string;
+type ID = string;
+
 interface Cell {
   name: string;
-  cell_id: string;
+  id: ID;
+  short: string;
+  cell_id: CellID;
   description: string;
-  markers: string[];
-  products: string[];
-  subsets: string[];
-  parent: string;
-  growth_factors: string[];
+  surface_markers: SurfaceMarkerID[];
+  cytokine_products: CytokineID[];
+  cell_subsets: CellID[];
+  parent_cell: CellID;
 }
 
 interface Cytokine {
   name: string;
-  cytokine_id: string;
-  targets: string[];
-  producers: string[];
+  short: string;
+  id: ID;
+  description: string;
+  cytokine_id: CytokineID;
+  cell_targets: CellID[];
+  produced_by: CellID[];
+}
+
+interface SurfaceMarker {
+  name: string;
+  short: string;
+  id: ID;
+  description: string;
+  surface_marker_id: SurfaceMarkerID;
+}
+
+interface TranscriptionFactor {
+  name: string;
+  short: string;
+  id: ID;
+  description: string;
+  transcription_factor_id: TranscriptionFactorID;
 }
