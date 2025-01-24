@@ -1,11 +1,11 @@
 ---
-const { elements } = Astro.props;
+import Table from "./table.astro";
+
+const { data } = Astro.props;
 ---
 
 <div>
-  <ul>
-    <slot />
-  </ul>
+  <Table data={data} />
 </div>
 
 <style>

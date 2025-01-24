@@ -1,0 +1,42 @@
+---
+interface TableRow {
+  key: string;
+  value: string | string[] | number;
+  link: string | string[];
+}
+
+interface Props {
+  data: TableRow[];
+}
+
+const { data } = Astro.props;
+//{i > 0 && ", "}
+---
+
+<div class="table-container">
+  <table>
+    <tbody>
+      {
+        data.map((row) => (
+          <tr>
+            <td class="key">{row.key}</td>
+            <td class="value">{row.value}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.5rem;
+  }
+</style>

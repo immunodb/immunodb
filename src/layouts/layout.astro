@@ -8,7 +8,7 @@ import Header from "../components/header.astro";
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -57,5 +57,18 @@ import Header from "../components/header.astro";
     padding-top: 20px;
     min-width: 800px;
     margin: auto;
+  }
+
+  @media (max-width: 868px) {
+    #content {
+      padding: 10px;
+      min-width: 100%;
+    }
+  }
+  @media (max-width: 480px) {
+    #content {
+      padding: 5px;
+      min-width: 100%;
+    }
   }
 </style>
