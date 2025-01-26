@@ -99,7 +99,7 @@ for (let c of cells) {
       return { name: x.short, id: x.cytokine_id };
     });
 
-  c.id = "cell-" + c.cell_id;
+  c.id = "cell/" + c.cell_id;
 }
 
 writeFileSync("data/cells.json", JSON.stringify(cells, null, 4));
@@ -108,7 +108,7 @@ writeFileSync("data/cells.json", JSON.stringify(cells, null, 4));
 console.log("Building Cytokines");
 
 for (let c of cytokines) {
-  c.id = "cytokine-" + c.cytokine_id;
+  c.id = "cytokine/" + c.cytokine_id;
   c.targets = cells
     .filter((cell) => cell.growth_factors.includes(c.cytokine_id))
     .map((cell) => cell.cell_id);
@@ -136,7 +136,7 @@ writeFileSync("data/markers.json", JSON.stringify(markers, null, 2));
 // Build Transcription Factors
 console.log("Building Transcription Factors");
 for (let tf of transcription_factors) {
-  tf.id = "transcription-factor-" + tf.transcription_factor_id;
+  tf.id = "transcription-factor/" + tf.transcription_factor_id;
 }
 
 writeFileSync(
