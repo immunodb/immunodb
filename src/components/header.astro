@@ -1,59 +1,37 @@
 ---
-import Search from "astro-pagefind/components/Search";
+
 ---
 
 <header>
-  <a id="home" href="/immunodb/">ImmunoDB</a>
-  <Search
-    id="search"
-    className="pagefind-ui"
-    uiOptions={{ showImages: false }}
-  />
+  <a id="home" href="/immunodb/"
+    ><img src="/immunodb/android-chrome-192x192.png" /></a
+  >
+  <a id="explore" href="/immunodb/explore">Explore</a>
 </header>
+
 <style>
   header {
     box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.25);
     border-bottom: 1px solid #9f9f9f;
     display: flex;
+
     background-color: #d9d9d9;
     justify-content: center;
     align-items: center;
-    height: 53px;
+    height: 30px;
   }
 
-  #home {
+  header img {
+    width: 24px;
+    padding-right: 24px;
+  }
+
+  header a {
     font-family: Arial, Helvetica, sans-serif;
-    padding-right: 20px;
+    padding-right: 12px;
     cursor: pointer;
     color: black;
     text-decoration-line: none;
-    font-size: 24px;
-  }
-
-  .pagefind-ui {
-    --pagefind-ui-scale: 0.8;
-    --pagefind-ui-primary: navy;
-    --pagefind-ui-text: black;
-    --pagefind-ui-border: slategrey;
-    --pagefind-ui-border-width: 1px;
-    --pagefind-ui-border-radius: 2px;
-    width: 20%;
-  }
-
-  .pagefind-ui .pagefind-ui__drawer:not(.pagefind-ui__hidden) {
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin-top: 0px;
-    z-index: 9999;
-    padding: 0 2em 1em;
-    overflow-y: auto;
-    box-shadow:
-      0 10px 10px -5px rgba(0, 0, 0, 0.2),
-      0 2px 2px 0 rgba(0, 0, 0, 0.1);
-    border-bottom-right-radius: var(--pagefind-ui-border-radius);
-    border-bottom-left-radius: var(--pagefind-ui-border-radius);
-    background-color: var(--pagefind-ui-background);
-    border: 1px solid slategrey;
+    font-size: 20px;
   }
 </style>

@@ -10,9 +10,11 @@ export async function getStaticPaths() {
   }));
 }
 
-const { transcription_factor } = Astro.props;
+let { transcription_factor } = Astro.props;
+transcription_factor.infobox = [
+  { key: "Class", value: [{ name: "Transcription Factor", id: undefined }] },
+  { key: "Expressed By", value: transcription_factor.expressed_by },
+];
 ---
 
-<Page data={transcription_factor}>
-  <li><span>Class</span> Class</li>
-</Page>
+<Page data={transcription_factor} />

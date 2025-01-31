@@ -9,9 +9,11 @@ export async function getStaticPaths() {
   }));
 }
 
-const { marker } = Astro.props;
+let { marker } = Astro.props;
+marker.infobox = [
+  { key: "Class", value: [{ name: "Surface Marker", id: undefined }] },
+  { key: "Found On", value: marker.found_on },
+];
 ---
 
-<Page data={marker}>
-  <li><span>Class</span> Class</li>
-</Page>
+<Page data={marker} />

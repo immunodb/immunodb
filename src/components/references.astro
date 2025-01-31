@@ -1,13 +1,17 @@
 ---
-let { refs } = Astro.props;
-refs = ["demo"];
+interface Ref {
+  title: string;
+  url: string;
+}
+
+const { refs } = Astro.props as { refs: Ref[] };
 ---
 
 <h2>References</h2>
 <hr />
 <ul>
   {
-    refs.map((e) => (
+    refs.map(() => (
       <li>
         Article - Author - <a href="https://pubmed.ncbi.nlm.nih.gov/">Pubmed</a>
       </li>

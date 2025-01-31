@@ -1,9 +1,20 @@
+/* eslint-disable no-undef */
 import { parse } from "csv-parse/sync";
 import { readFileSync, writeFileSync } from "fs";
 
 function sort_on_short(array) {
   return array.sort((a, b) => {
     if (a.short > b.short) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+}
+
+function sort_on_name(array) {
+  return array.sort((a, b) => {
+    if (a.name > b.name) {
       return 1;
     } else {
       return -1;
@@ -49,33 +60,75 @@ markers = sort_on_short(markers);
 let cells = parse(readFileSync("./data/cells.csv", "utf-8"), opts);
 cells = sort_on_short(cells);
 
-// Build Cells
+console.log("Building Cytokines");
+for (let c of cytokines) {
+  c.id = "cytokine/" + c.cytokine_id;
+  c.infobox = [];
+  c.refs = [];
+  c.produced_by = [];
+  c.stimulates = [];
+}
+
+console.log("Building Markers");
+for (let m of markers) {
+  m.id = "marker/" + m.marker_id;
+  m.infobox = [];
+  m.refs = [];
+  m.found_on = [];
+}
+
+console.log("Building Transcription Factors");
+for (let tf of transcription_factors) {
+  tf.id = "transcription_factor/" + tf.transcription_factor_id;
+  tf.infobox = [];
+  tf.refs = [];
+  tf.expressed_by = [];
+}
+
 console.log("Building Cells");
-
 for (let c of cells) {
-  c.markers = cell_markers
-    .filter((x) => x.cell_id == c.cell_id)
-    .map((x) => {
-      return {
-        name: markers.find((m) => m.marker_id == x.marker_id).short,
-        id: x.marker_id,
-      };
-    });
+  c.infobox = [];
+  c.refs = [];
+  c.id = "cell/" + c.cell_id;
 
-  c.products = cell_products
-    .filter((x) => x.cell_id == c.cell_id)
-    .map((x) => {
-      return { name: x.short, id: x.cytokine_id };
-    });
+  c.markers = sort_on_name(
+    cell_markers
+      .filter((x) => x.cell_id == c.cell_id)
+      .map((x) => {
+        let m = markers.find((m) => x.marker_id == m.marker_id);
+        m.found_on.push({ name: c.short, id: c.id });
+        return {
+          name: markers.find((m) => m.marker_id == x.marker_id).short,
+          id: "marker/" + x.marker_id,
+        };
+      }),
+  );
+
+  c.products = sort_on_name(
+    cell_products
+      .filter((x) => x.cell_id == c.cell_id)
+      .map((x) => {
+        cytokines
+          .find((m) => x.cytokine_id == m.cytokine_id)
+          .produced_by.push({ name: c.short, id: c.id });
+        return {
+          name: cytokines.find((cy) => cy.cytokine_id == x.cytokine_id).short,
+          id: "cytokine/" + x.cytokine_id,
+        };
+      }),
+  );
 
   c.transcription_factors = cell_transcription_factors
     .filter((x) => x.cell_id == c.cell_id)
     .map((x) => {
+      transcription_factors
+        .find((m) => x.transcription_factor_id == m.transcription_factor_id)
+        .expressed_by.push({ name: c.short, id: c.id });
       return {
         name: transcription_factors.find(
           (tf) => tf.transcription_factor_id == x.transcription_factor_id,
         ).short,
-        id: x.transcription_factor_id,
+        id: "transcription_factor/" + x.transcription_factor_id,
       };
     });
 
@@ -85,60 +138,30 @@ for (let c of cells) {
       let child = x.subset_cell_id;
       cells.find((x) => x.cell_id == child).parent = {
         name: c.short,
-        id: c.cell_id,
+        id: c.id,
       };
       return {
         name: cells.find((s) => s.cell_id == x.subset_cell_id).short,
-        id: x.subset_cell_id,
+        id: "cell/" + x.subset_cell_id,
       };
     });
 
   c.growth_factors = cell_growth_factors
     .filter((x) => x.cell_id == c.cell_id)
     .map((x) => {
-      return { name: x.short, id: x.cytokine_id };
-    });
-
-  c.id = "cell/" + c.cell_id;
-}
-
-writeFileSync("data/cells.json", JSON.stringify(cells, null, 4));
-
-// Build Cytokines
-console.log("Building Cytokines");
-
-for (let c of cytokines) {
-  c.id = "cytokine/" + c.cytokine_id;
-  c.targets = cells
-    .filter((cell) => cell.growth_factors.includes(c.cytokine_id))
-    .map((cell) => cell.cell_id);
-}
-
-writeFileSync("data/cytokines.json", JSON.stringify(cytokines, null, 2));
-
-// Build Markers
-
-console.log("Building Markers");
-for (let m of markers) {
-  m.id = "marker-" + m.marker_id;
-  m.found_on = cell_markers
-    .filter((cm) => cm.marker_id == m.marker_id)
-    .map((cm) => {
+      cytokines
+        .find((m) => x.cytokine_id == m.cytokine_id)
+        .stimulates.push({ name: c.short, id: c.id });
       return {
-        name: cells.find((x) => x.cell_id == cm.cell_id).short,
-        id: cm.cell_id,
+        name: cytokines.find((gf) => gf.cytokine_id == x.cytokine_id).short,
+        id: "cytokine/" + x.cytokine_id,
       };
     });
 }
 
+writeFileSync("data/cells.json", JSON.stringify(cells, null, 4));
+writeFileSync("data/cytokines.json", JSON.stringify(cytokines, null, 2));
 writeFileSync("data/markers.json", JSON.stringify(markers, null, 2));
-
-// Build Transcription Factors
-console.log("Building Transcription Factors");
-for (let tf of transcription_factors) {
-  tf.id = "transcription-factor/" + tf.transcription_factor_id;
-}
-
 writeFileSync(
   "data/transcription_factors.json",
   JSON.stringify(transcription_factors, null, 2),

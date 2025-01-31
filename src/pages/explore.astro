@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+const cells = await getCollection("cells");
+const cytokines = await getCollection("cytokines");
+const markers = await getCollection("markers");
+const tf = await getCollection("transcription_factors");
+
+import Listbox from "../components/listbox.astro";
+import Layout from "../layouts/layout.astro";
+---
+
+<Layout title="ImmunoDB">
+  <main>
+    <div class="index-container">
+      <Listbox
+        title="Cells"
+        elements={cells.map((c) => ({
+          name: c.data.short,
+          href: "/immunodb/cell/" + c.data.cell_id,
+        }))}
+      />
+      <Listbox
+        title="Cytokines"
+        elements={cytokines.map((c) => ({
+          name: c.data.short,
+          href: "/immunodb/cytokine/" + c.data.cytokine_id,
+        }))}
+      />
+      <Listbox
+        title="Markers"
+        elements={markers.map((c) => ({
+          name: c.data.short,
+          href: "/immunodb/marker/" + c.data.marker_id,
+        }))}
+      />
+      <Listbox
+        title="Transcription Factors"
+        elements={tf.map((c) => ({
+          name: c.data.short,
+          href:
+            "/immunodb/transcription_factor/" + c.data.transcription_factor_id,
+        }))}
+      />
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .index-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: space-around;
+    gap: 20px;
+  }
+</style>

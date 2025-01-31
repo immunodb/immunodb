@@ -4,8 +4,11 @@
   "exclude": ["dist"],
   "compilerOptions": {
     "moduleResolution": "nodenext",
+    "target": "ESNext",
     "module": "NodeNext",
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
   }
 }

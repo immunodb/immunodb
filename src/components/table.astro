@@ -1,8 +1,7 @@
 ---
 interface TableRow {
   key: string;
-  value: string | string[] | number;
-  link: string | string[];
+  value: { name: string; id?: string }[];
 }
 
 interface Props {
@@ -10,19 +9,42 @@ interface Props {
 }
 
 const { data } = Astro.props;
-//{i > 0 && ", "}
 ---
 
 <div class="table-container">
   <table>
     <tbody>
       {
-        data.map((row) => (
-          <tr>
-            <td class="key">{row.key}</td>
-            <td class="value">{row.value}</td>
-          </tr>
-        ))
+        data.map((row) => {
+          if (row.value.length == 0) {
+            return;
+          } else {
+            return (
+              <tr>
+                <td class="key">{row.key}</td>
+                <td class="value">
+                  {row.value.map((item, i) => {
+                    if (item.id != null) {
+                      return (
+                        <span>
+                          <!--prettier-ignore-->
+                          <a href={"/immunodb/" + item.id}>{item.name}</a>{i < row.value.length - 1 && ", "}
+                        </span>
+                      );
+                    } else {
+                      return (
+                        <span>
+                          <!--prettier-ignore-->
+                          {item.name}{i < row.value.length - 1 && ", "}
+                        </span>
+                      );
+                    }
+                  })}
+                </td>
+              </tr>
+            );
+          }
+        })
       }
     </tbody>
   </table>
@@ -30,13 +52,25 @@ const { data } = Astro.props;
 
 <style>
   table {
-    width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    table-layout: auto;
   }
 
-  th,
   td {
     text-align: left;
-    padding: 0.5rem;
+    padding: 4px;
+    font-size: 12px;
+    vertical-align: top;
+    line-height: 16px;
+  }
+  .key {
+    font-size: 14px;
+    padding-left: 20px;
+  }
+  .value {
+    padding-top: 5px;
+  }
+  .no-space {
+    white-space: nowrap;
   }
 </style>

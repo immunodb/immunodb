@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
+import { console, process } from "globals";
 import { JWT } from "google-auth-library";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import assert from "node:assert/strict";

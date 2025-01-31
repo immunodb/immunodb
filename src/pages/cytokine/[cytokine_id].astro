@@ -9,9 +9,12 @@ export async function getStaticPaths() {
   }));
 }
 
-const { cytokine } = Astro.props;
+let { cytokine } = Astro.props;
+cytokine.infobox = [
+  { key: "Class", value: [{ name: "Cytokine", id: undefined }] },
+  { key: "Produced By", value: cytokine.produced_by },
+  { key: "Acts On", value: cytokine.stimulates },
+];
 ---
 
-<Page data={cytokine}>
-  <li><span>Class</span> Class</li>
-</Page>
+<Page data={cytokine} />

@@ -10,10 +10,26 @@ export async function getStaticPaths() {
   }));
 }
 
-const { cell } = Astro.props;
-const data = [
-  { key: "Class", value: "Lymphocyte" },
-  { key: "Surface Markers", value: cell.markers },
+let { cell } = Astro.props;
+cell.infobox = [
+  { key: "Class", value: [{ name: "Lymphocyte", id: undefined }] },
+  { key: "Subsets", value: cell.subsets },
+  {
+    key: "Surface Markers",
+    value: cell.markers,
+  },
+  {
+    key: "Cytokine Products",
+    value: cell.products,
+  },
+  {
+    key: "Transcription Factors",
+    value: cell.transcription_factors,
+  },
+  {
+    key: "Growth Factors",
+    value: cell.growth_factors,
+  },
 ];
 ---
 

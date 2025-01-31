@@ -10,11 +10,11 @@ const { data } = Astro.props;
   <article data-pagefind-body>
     <h1>{data.name}</h1>
     <hr />
-    <Infobox data={data} />
+    <Infobox data={data.infobox} />
 
     <p>{data.description}</p>
   </article>
-  <References />
+  <References refs={data.refs} />
 </Layout>
 
 <style>

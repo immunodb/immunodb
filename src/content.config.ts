@@ -1,23 +1,28 @@
 import { file } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
-let cell_schema = z.object({
+const link = z.array(
+  z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+);
+
+const cell_schema = z.object({
   name: z.string(),
   short: z.string(),
   cell_id: z.string(),
   id: z.string(),
   description: z.string(),
-  markers: z.array(
-    z.object({
-      id: z.string(),
-      name: z.string(),
-    }),
-  ),
+  infobox: z.array(z.object({ key: z.string(), value: link })),
+  markers: link,
+  products: link,
+  transcription_factors: link,
+  growth_factors: link,
 });
 
 const cells = defineCollection({
   loader: file("./data/cells.json"),
-  schema: cell_schema,
 });
 
 const cytokines = defineCollection({
