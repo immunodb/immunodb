@@ -15,6 +15,8 @@ const CELL_NAMES = [
   "markers",
   "references",
   "transcription_factors",
+  "conditions",
+  "condition_associated_id",
 ];
 
 const doc = await get_doc();

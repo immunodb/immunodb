@@ -1,0 +1,20 @@
+---
+import { getCollection } from "astro:content";
+import Page from "../../layouts/page.astro";
+
+export async function getStaticPaths() {
+  const conditions = await getCollection("conditions");
+  return conditions.map((c) => ({
+    params: { condition_id: c.data.condition_id },
+    props: { condition: c.data },
+  }));
+}
+
+let { condition } = Astro.props;
+condition.infobox = [
+  { key: "Class", value: [{ name: "undef", id: undefined }] },
+  { key: "Associated Pages", value: condition.associated },
+];
+---
+
+<Page data={condition} />

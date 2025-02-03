@@ -22,6 +22,8 @@ function sort_on_name(array) {
   });
 }
 
+let id_map = {};
+
 const opts = {
   columns: true,
   skip_empty_lines: true,
@@ -47,6 +49,13 @@ let cell_growth_factors = parse(
   readFileSync("./data/cell_growth_factors.csv", "utf-8"),
   opts,
 );
+let condition_associated_id = parse(
+  readFileSync("./data/condition_associated_id.csv", "utf-8"),
+  opts,
+);
+let conditions = sort_on_short(
+  parse(readFileSync("./data/conditions.csv", "utf-8"), opts),
+);
 
 let cytokines = parse(readFileSync("./data/cytokines.csv", "utf-8"), opts);
 cytokines = sort_on_short(cytokines);
@@ -67,6 +76,7 @@ for (let c of cytokines) {
   c.refs = [];
   c.produced_by = [];
   c.stimulates = [];
+  id_map[c.id] = c.short;
 }
 
 console.log("Building Markers");
@@ -75,6 +85,7 @@ for (let m of markers) {
   m.infobox = [];
   m.refs = [];
   m.found_on = [];
+  id_map[m.id] = m.short;
 }
 
 console.log("Building Transcription Factors");
@@ -83,6 +94,15 @@ for (let tf of transcription_factors) {
   tf.infobox = [];
   tf.refs = [];
   tf.expressed_by = [];
+  id_map[tf.id] = tf.short;
+}
+
+console.log("Building Conditions");
+for (let c of conditions) {
+  c.id = "condition/" + c.condition_id;
+  c.infobox = [];
+  c.refs = [];
+  id_map[c.id] = c.short;
 }
 
 console.log("Building Cells");
@@ -90,6 +110,7 @@ for (let c of cells) {
   c.infobox = [];
   c.refs = [];
   c.id = "cell/" + c.cell_id;
+  id_map[c.id] = c.short;
 
   c.markers = sort_on_name(
     cell_markers
@@ -159,6 +180,15 @@ for (let c of cells) {
     });
 }
 
+for (const c of conditions) {
+  c.associated = condition_associated_id
+    .filter((x) => x.condition_id == c.condition_id)
+    .map((x) => {
+      return { name: id_map[x.associated_id], id: x.associated_id };
+    });
+}
+
+writeFileSync("data/conditions.json", JSON.stringify(conditions, null, 4));
 writeFileSync("data/cells.json", JSON.stringify(cells, null, 4));
 writeFileSync("data/cytokines.json", JSON.stringify(cytokines, null, 2));
 writeFileSync("data/markers.json", JSON.stringify(markers, null, 2));

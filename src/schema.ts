@@ -3,6 +3,7 @@ type CytokineID = string;
 type SurfaceMarkerID = string;
 type TranscriptionFactorID = string;
 type ID = string;
+type ConditionID = string;
 
 interface Cell {
   name: string;
@@ -40,4 +41,12 @@ interface TranscriptionFactor {
   id: ID;
   description: string;
   transcription_factor_id: TranscriptionFactorID;
+}
+
+interface Condition {
+  name: string;
+  short: string;
+  id: ID;
+  condition_id: ConditionID;
+  associated_id: ID[];
 }

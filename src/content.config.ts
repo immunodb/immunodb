@@ -37,4 +37,14 @@ const transcription_factors = defineCollection({
   loader: file("./data/transcription_factors.json"),
 });
 
-export const collections = { cells, cytokines, markers, transcription_factors };
+const conditions = defineCollection({
+  loader: file("./data/conditions.json"),
+});
+
+export const collections = {
+  cells,
+  conditions,
+  cytokines,
+  markers,
+  transcription_factors,
+};
