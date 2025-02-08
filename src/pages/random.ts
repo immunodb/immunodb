@@ -1,5 +1,5 @@
-import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
+import { getCollection } from "astro:content";
 
 const cells = await getCollection("cells");
 const conditions = await getCollection("conditions");
@@ -15,12 +15,30 @@ const allPages = [
   ...transcription_factors.map((x) => x.id),
 ];
 
-export const GET: APIRoute = async ({ redirect }) => {
-  try {
-    const randomPage = allPages[Math.floor(Math.random() * allPages.length)];
-    return redirect("/immunodb/" + randomPage, 302);
-  } catch (error) {
-    console.error("Random route failed: ", error);
-    return redirect("/404", 302);
-  }
+export const GET: APIRoute = async () => {
+  return new Response(
+    `<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redirecting to random page...</title>
+    <script>
+      // Define the pages array
+      const pages = ${JSON.stringify(allPages)};
+      // Select random page at runtime
+      const randomPage = pages[Math.floor(Math.random() * pages.length)];
+      const redirectUrl = '/immunodb/' + randomPage;
+      window.location.href = redirectUrl;
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to a random page...</p>
+  </body>
+</html>`,
+    {
+      status: 200,
+      headers: {
+        "Content-Type": "text/html",
+      },
+    },
+  );
 };
