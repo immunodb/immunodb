@@ -3,29 +3,48 @@
 ---
 
 <header>
-  <div class="logo">
-    <a id="home" href="/immunodb/"
-      ><img src="/immunodb/android-chrome-192x192.png" /></a
-    >
+  <div class="wrapper">
+    <div class="logo">
+      <a id="home" href="/immunodb/">
+        <img
+          src="/immunodb/public/favicon-32x32.png"
+          alt="ImmunoDB logo image"
+        />
+      </a>
+    </div>
+    <nav>
+      <a id="explore" href="/immunodb/explore">Explore</a>
+      <a id="random" href="/immunodb/random">Random</a>
+    </nav>
   </div>
-  <nav>
-    <a id="explore" href="/immunodb/explore">Explore</a>
-    <a id="random" href="/immunodb/random">Random</a>
-  </nav>
 </header>
 
 <style>
   header {
     box-shadow: 0 1px 2px 0px #00000040;
     border-bottom: 1px solid #9f9f9f;
-    display: flex;
-
     background-color: #f3f3f3;
-    justify-content: space-around;
+    height: 30px;
+  }
+  .wrapper {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     height: 30px;
   }
 
+  @media (min-width: 320px) {
+    .wrapper {
+      width: 90%;
+      margin: auto;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .wrapper {
+      width: 800px;
+    }
+  }
   .logo {
     margin-top: 4px;
   }
