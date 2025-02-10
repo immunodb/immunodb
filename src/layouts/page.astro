@@ -24,13 +24,23 @@ const { data } = Astro.props;
   hr {
     margin-bottom: 20px;
   }
-  article {
-    overflow: auto;
-  }
   li {
     list-style: none;
   }
   span {
     font-weight: 600;
+  }
+
+  @media (min-width: 320px) {
+    article {
+      overflow: hidden;
+    }
+  }
+
+  @media (min-width: 900px) {
+    article {
+      overflow: auto;
+      font-size: 14px;
+    }
   }
 </style>

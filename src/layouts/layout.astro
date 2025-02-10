@@ -52,23 +52,22 @@ import Header from "../components/header.astro";
     flex-direction: column;
     justify-content: space-between;
   }
-  #content {
-    flex-grow: 4;
-    padding-top: 30px;
-    width: 600px;
-    margin: auto;
-  }
 
-  @media (max-width: 868px) {
+  @media (min-width: 320px) {
     #content {
-      padding: 10px;
-      min-width: 100%;
+      flex-grow: 4;
+      padding-top: 30px;
+      margin: auto;
+      padding: 5%;
+      width: 90%;
     }
   }
-  @media (max-width: 480px) {
+  @media (min-width: 900px) {
     #content {
-      padding: 5px;
-      min-width: 100%;
+      flex-grow: 4;
+      padding-top: 30px;
+      width: 800px;
+      margin: auto;
     }
   }
 </style>

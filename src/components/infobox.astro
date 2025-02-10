@@ -10,14 +10,11 @@ const { data } = Astro.props;
 
 <style>
   div {
-    float: left;
     border: 1px solid #9f9f9f;
     background-color: #f3f3f3;
-    width: 360px;
     line-height: 30px;
     border-radius: 4px;
     box-shadow: 0 1px 2px 0px #00000040;
-    margin-right: 20px;
   }
 
   h2 {
@@ -26,5 +23,22 @@ const { data } = Astro.props;
   }
   span {
     font-weight: 600;
+  }
+
+  @media (min-width: 320px) {
+    div {
+      float: none;
+      width: 90%;
+      margin: 5%;
+    }
+  }
+
+  @media (min-width: 900px) {
+    div {
+      margin: 0;
+      float: left;
+      width: 360px;
+      margin-right: 20px;
+    }
   }
 </style>
