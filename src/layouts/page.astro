@@ -8,7 +8,9 @@ const { data } = Astro.props;
 
 <Layout title={data.name + " - ImmunoDB"}>
   <article data-pagefind-body>
-    <h1>{data.name} ({data.short})</h1>
+    <h1>
+      {data.name == data.short ? data.name : `${data.name} (${data.short})`}
+    </h1>
     <hr />
     <Infobox data={data.infobox} />
 
