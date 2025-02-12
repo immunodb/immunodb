@@ -66,6 +66,11 @@ let transcription_factors = parse(
 transcription_factors = sort_on_short(transcription_factors);
 let markers = parse(readFileSync("./data/markers.csv", "utf-8"), opts);
 markers = sort_on_short(markers);
+let reference_id = parse(
+  readFileSync("./data/reference_id.csv", "utf-8"),
+  opts,
+);
+let references = parse(readFileSync("./data/references.csv", "utf-8"), opts);
 let cells = parse(readFileSync("./data/cells.csv", "utf-8"), opts);
 cells = sort_on_short(cells);
 
@@ -73,7 +78,9 @@ console.log("Building Cytokines");
 for (let c of cytokines) {
   c.id = "cytokine/" + c.cytokine_id;
   c.infobox = [];
-  c.refs = [];
+  c.refs = reference_id
+    .filter((x) => x.id == c.id)
+    .map((x) => references.find((y) => y.reference_id == x.reference_id));
   c.produced_by = [];
   c.stimulates = [];
   id_map[c.id] = c.short;
@@ -83,7 +90,9 @@ console.log("Building Markers");
 for (let m of markers) {
   m.id = "marker/" + m.marker_id;
   m.infobox = [];
-  m.refs = [];
+  m.refs = reference_id
+    .filter((x) => x.id == m.id)
+    .map((x) => references.find((y) => y.reference_id == x.reference_id));
   m.found_on = [];
   id_map[m.id] = m.short;
 }
@@ -92,7 +101,9 @@ console.log("Building Transcription Factors");
 for (let tf of transcription_factors) {
   tf.id = "transcription_factor/" + tf.transcription_factor_id;
   tf.infobox = [];
-  tf.refs = [];
+  tf.refs = reference_id
+    .filter((x) => x.id == tf.id)
+    .map((x) => references.find((y) => y.reference_id == x.reference_id));
   tf.expressed_by = [];
   id_map[tf.id] = tf.short;
 }
@@ -101,14 +112,18 @@ console.log("Building Conditions");
 for (let c of conditions) {
   c.id = "condition/" + c.condition_id;
   c.infobox = [];
-  c.refs = [];
+  c.refs = reference_id
+    .filter((x) => x.id == c.id)
+    .map((x) => references.find((y) => y.reference_id == x.reference_id));
   id_map[c.id] = c.short;
 }
 
 console.log("Building Cells");
 for (let c of cells) {
   c.infobox = [];
-  c.refs = [];
+  c.refs = reference_id
+    .filter((x) => x.id == c.id)
+    .map((x) => references.find((y) => y.reference_id == x.reference_id));
   c.id = "cell/" + c.cell_id;
   id_map[c.id] = c.short;
 

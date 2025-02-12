@@ -1,7 +1,9 @@
 ---
 interface Ref {
-  title: string;
-  url: string;
+  name: string;
+  author: string;
+  year: string;
+  url?: string;
 }
 
 const { refs } = Astro.props as { refs: Ref[] };
@@ -11,9 +13,17 @@ const { refs } = Astro.props as { refs: Ref[] };
 <hr />
 <ul>
   {
-    refs.map(() => (
+    refs.map((r) => (
       <li>
-        Article - Author - <a href="https://pubmed.ncbi.nlm.nih.gov/">Pubmed</a>
+        {r.url ? (
+          <a href={r.url}>
+            {r.author} ({r.year}) - {r.name}
+          </a>
+        ) : (
+          <>
+            {r.author} ({r.year}) - {r.name}
+          </>
+        )}
       </li>
     ))
   }
