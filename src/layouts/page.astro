@@ -16,7 +16,7 @@ const { data } = Astro.props;
 
     <p>{data.description}</p>
   </article>
-  <References refs={data.refs} />
+  {data.refs.length == 0 ? <></> : <References refs={data.refs} />}
 </Layout>
 
 <style>
