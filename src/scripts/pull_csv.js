@@ -6,18 +6,20 @@ import assert from "node:assert/strict";
 
 const CELL_NAMES = [
   "cells",
+  "cell_growth_factors",
   "cell_markers",
   "cell_products",
-  "cell_transcription_factors",
   "cell_subsets",
-  "cell_growth_factors",
-  "cytokines",
-  "markers",
-  "reference_id",
-  "references",
-  "transcription_factors",
+  "cell_transcription_factors",
   "conditions",
   "condition_associated_id",
+  "cytokines",
+  "cytokine_markers",
+  "markers",
+  "references",
+  "reference_id",
+  "therapeutics",
+  "transcription_factors",
 ];
 
 const doc = await get_doc();

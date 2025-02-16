@@ -41,10 +41,15 @@ const conditions = defineCollection({
   loader: file("./data/conditions.json"),
 });
 
+const therapeutics = defineCollection({
+  loader: file("./data/therapeutics.json"),
+});
+
 export const collections = {
   cells,
   conditions,
   cytokines,
   markers,
   transcription_factors,
+  therapeutics,
 };

@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import Page from "../../layouts/page.astro";
+
+export async function getStaticPaths() {
+  const therapeutics = await getCollection("therapeutics");
+  return therapeutics.map((c) => ({
+    params: { therapeutic_id: c.data.therapeutic_id },
+    props: { therapeutic: c.data },
+  }));
+}
+
+let { therapeutic } = Astro.props;
+therapeutic.infobox = [
+  { key: "Class", value: [{ name: therapeutic.class, id: undefined }] },
+  {
+    key: "Target",
+    value: therapeutic.target,
+  },
+];
+---
+
+<Page data={therapeutic} />

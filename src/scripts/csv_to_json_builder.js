@@ -22,6 +22,13 @@ function sort_on_name(array) {
   });
 }
 
+function make_name_id_obj(id) {
+  return {
+    name: id_map[id],
+    id: id,
+  };
+}
+
 let id_map = {};
 
 const opts = {
@@ -49,12 +56,19 @@ let cell_growth_factors = parse(
   readFileSync("./data/cell_growth_factors.csv", "utf-8"),
   opts,
 );
+let cytokine_markers = parse(
+  readFileSync("./data/cytokine_markers.csv", "utf-8"),
+  opts,
+);
 let condition_associated_id = parse(
   readFileSync("./data/condition_associated_id.csv", "utf-8"),
   opts,
 );
 let conditions = sort_on_short(
   parse(readFileSync("./data/conditions.csv", "utf-8"), opts),
+);
+let therapeutics = sort_on_short(
+  parse(readFileSync("./data/therapeutics.csv", "utf-8"), opts),
 );
 
 let cytokines = parse(readFileSync("./data/cytokines.csv", "utf-8"), opts);
@@ -83,6 +97,11 @@ for (let c of cytokines) {
     .map((x) => references.find((y) => y.reference_id == x.reference_id));
   c.produced_by = [];
   c.stimulates = [];
+  c.receptors = cytokine_markers
+    .filter((x) => x.cytokine_id == c.cytokine_id)
+    .map((x) => {
+      return make_name_id_obj("/marker" + x.marker_id);
+    });
   id_map[c.id] = c.short;
 }
 
@@ -118,6 +137,17 @@ for (let c of conditions) {
   id_map[c.id] = c.short;
 }
 
+console.log("Building Therapeutics");
+for (let t of therapeutics) {
+  t.id = "therapeutic/" + t.therapeutic_id;
+  t.infobox = [];
+  t.refs = reference_id
+    .filter((x) => x.id == t.id)
+    .map((x) => references.find((y) => y.reference_id == x.reference_id));
+  t.target = [make_name_id_obj(t.target)];
+  id_map[t.id] = t.short;
+}
+
 console.log("Building Cells");
 for (let c of cells) {
   c.infobox = [];
@@ -133,10 +163,7 @@ for (let c of cells) {
       .map((x) => {
         let m = markers.find((m) => x.marker_id == m.marker_id);
         m.found_on.push({ name: c.short, id: c.id });
-        return {
-          name: markers.find((m) => m.marker_id == x.marker_id).short,
-          id: "marker/" + x.marker_id,
-        };
+        return make_name_id_obj("marker/" + x.marker_id);
       }),
   );
 
@@ -147,10 +174,7 @@ for (let c of cells) {
         cytokines
           .find((m) => x.cytokine_id == m.cytokine_id)
           .produced_by.push({ name: c.short, id: c.id });
-        return {
-          name: cytokines.find((cy) => cy.cytokine_id == x.cytokine_id).short,
-          id: "cytokine/" + x.cytokine_id,
-        };
+        return make_name_id_obj("cytokine/" + x.cytokine_id);
       }),
   );
 
@@ -160,12 +184,9 @@ for (let c of cells) {
       transcription_factors
         .find((m) => x.transcription_factor_id == m.transcription_factor_id)
         .expressed_by.push({ name: c.short, id: c.id });
-      return {
-        name: transcription_factors.find(
-          (tf) => tf.transcription_factor_id == x.transcription_factor_id,
-        ).short,
-        id: "transcription_factor/" + x.transcription_factor_id,
-      };
+      return make_name_id_obj(
+        "transcription_factor/" + x.transcription_factor_id,
+      );
     });
 
   c.subsets = cell_subsets
@@ -176,10 +197,7 @@ for (let c of cells) {
         name: c.short,
         id: c.id,
       };
-      return {
-        name: cells.find((s) => s.cell_id == x.subset_cell_id).short,
-        id: "cell/" + x.subset_cell_id,
-      };
+      return make_name_id_obj("cell/" + x.subset_cell_id);
     });
 
   c.growth_factors = cell_growth_factors
@@ -188,10 +206,7 @@ for (let c of cells) {
       cytokines
         .find((m) => x.cytokine_id == m.cytokine_id)
         .stimulates.push({ name: c.short, id: c.id });
-      return {
-        name: cytokines.find((gf) => gf.cytokine_id == x.cytokine_id).short,
-        id: "cytokine/" + x.cytokine_id,
-      };
+      return make_name_id_obj("cytokine/" + x.cytokine_id);
     });
 }
 
@@ -199,7 +214,7 @@ for (const c of conditions) {
   c.associated = condition_associated_id
     .filter((x) => x.condition_id == c.condition_id)
     .map((x) => {
-      return { name: id_map[x.associated_id], id: x.associated_id };
+      return make_name_id_obj(x.associated_id);
     });
 }
 
@@ -211,5 +226,6 @@ writeFileSync(
   "data/transcription_factors.json",
   JSON.stringify(transcription_factors, null, 2),
 );
+writeFileSync("data/therapeutics.json", JSON.stringify(therapeutics, null, 2));
 
 console.log("Done JSON Build");

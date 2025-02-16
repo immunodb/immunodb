@@ -4,6 +4,8 @@ const cells = await getCollection("cells");
 const cytokines = await getCollection("cytokines");
 const markers = await getCollection("markers");
 const tf = await getCollection("transcription_factors");
+const conditions = await getCollection("conditions");
+const therapeutics = await getCollection("therapeutics");
 
 import Listbox from "../components/listbox.astro";
 import Layout from "../layouts/layout.astro";
@@ -39,6 +41,20 @@ import Layout from "../layouts/layout.astro";
           name: c.data.short,
           href:
             "/immunodb/transcription_factor/" + c.data.transcription_factor_id,
+        }))}
+      />
+      <Listbox
+        title="Conditions"
+        elements={conditions.map((c) => ({
+          name: c.data.short,
+          href: "/immunodb/condition/" + c.data.condition_id,
+        }))}
+      />
+      <Listbox
+        title="Therapeutics"
+        elements={therapeutics.map((c) => ({
+          name: c.data.short,
+          href: "/immunodb/therapeutic/" + c.data.therapeutic_id,
         }))}
       />
     </div>
