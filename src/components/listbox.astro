@@ -1,28 +1,54 @@
 ---
 const { title, elements } = Astro.props;
+const initialLimit = 10;
 ---
 
-<div>
+<div class="listbox-container">
   <h2>{title}</h2>
-  <ul>
+  
+  {
+    elements.length > initialLimit && (
+      <input type="checkbox" id={`toggle-${title}`} class="toggle-checkbox" />
+    )
+  }
+  
+  <ul class="element-list">
     {
-      elements.map((el: { href: string; name: string }) => (
+      elements.slice(0, initialLimit).map((el: { href: string; name: string }) => (
         <li>
           <a href={el.href}>{el.name}</a>
         </li>
       ))
     }
   </ul>
+  
+  {
+    elements.length > initialLimit && (
+      <>
+        <div class="expandable-content">
+          <ul>
+            {elements.slice(initialLimit).map((el: { href: string; name: string }) => (
+              <li>
+                <a href={el.href}>{el.name}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <label for={`toggle-${title}`} class="show-more-btn"></label>
+      </>
+    )
+  }
 </div>
 
 <style>
-  div {
+  .listbox-container {
     border: 1px solid #9f9f9f;
     background-color: #f3f3f3;
     min-width: auto;
     line-height: 30px;
     border-radius: 4px;
     box-shadow: 0 1px 2px 0px #00000040;
+    position: relative;
   }
 
   ul {
@@ -33,9 +59,60 @@ const { title, elements } = Astro.props;
   li {
     list-style: none;
   }
+  
   h2 {
     font-family: "Times New Roman", Times, serif;
     margin: 10px 20px;
     font-weight: 300;
+  }
+
+  .expandable-content {
+    display: none;
+  }
+  
+  .expandable-content ul {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .toggle-checkbox {
+    display: none;
+  }
+
+  .toggle-checkbox:checked ~ .expandable-content {
+    display: block;
+  }
+
+  .show-more-btn {
+    display: block;
+    padding: 2px 2px;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    width: auto;
+    text-align: center;
+  }
+
+  .show-more-btn:hover {
+    text-decoration: underline;
+  }
+
+  .toggle-checkbox:checked ~ .show-more-btn::after {
+    content: "Less ⌃";
+  }
+
+  .toggle-checkbox:not(:checked) ~ .show-more-btn::after {
+    content: "More ⌄";
+  }
+
+  .show-more-btn {
+    font-size: 0;
+  }
+
+  .show-more-btn::after {
+    font-size: 14px;
+    color: #555;
   }
 </style>
